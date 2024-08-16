@@ -1,8 +1,9 @@
 import React from 'react'
 
-function Card({ title, img, rating, price }) {
+function Card({ title, img, rating, price ,brand}) {
     return (
         <div>
+            <p>{ brand}</p>
             <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <a>
                     <img loading='lazy' className="p-3 rounded-lg" src={img} alt="product image" />

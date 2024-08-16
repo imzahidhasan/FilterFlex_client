@@ -22,16 +22,19 @@ function ProductList() {
 
 
 
+    const handleFilter = async (e) => {
+        e.preventDefault()
+        setCurrentPage(1)
+        try {
+            const response = await fetch(`http://localhost:5000/products/filter?page=${currentPage}&limit=10&brand=${brand}&minValue=${minValue}&maxValue=${maxValue}&searchTerm=${searchTerm}`);
+            const data = await response.json();
+            setProducts(data.products);
+            setTotalPages(data.totalPages);
+        } catch (error) {
+            console.error('Failed to fetch products', error);
+        }
+    }
 
-
-
-
-
-
-
-
-
-    
     const fetchAllProducts = async (page) => {
         try {
             const response = await fetch(`http://localhost:5000/products?page=${page}&limit=10`);
@@ -127,7 +130,7 @@ function ProductList() {
             <div className='flex justify-center'>
                 <div className='p-4 flex gap-4'>
                     <form onChange={handleSort} className="max-w-40">
-                 
+
                         <select defaultValue={'0'} id="countries" name='sort' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <option disabled value='0'>Sort by</option>
                             <option value="1">Newest first</option>
@@ -138,7 +141,7 @@ function ProductList() {
                     {/* filter section */}
                     <form onSubmit={handleFilter} className='flex gap-4'>
                         <div class="max-w-40 ">
-                           
+
                             <select onChange={(e) => setBrand(e.target.value)} defaultValue={'a'} id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option disabled value="a">All Brand</option>
 
@@ -149,13 +152,13 @@ function ProductList() {
                         </div>
 
                         <div>
-                           
-                            <input onChange={(e) => setMinValue(e.target.value)} type="number" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Min Price"  />
+
+                            <input onChange={(e) => setMinValue(e.target.value)} type="number" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Min Price" />
                         </div>
 
                         <div>
-                          
-                            <input onChange={(e) => setMaxValue(e.target.value)} type="number" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Max Price"  />
+
+                            <input onChange={(e) => setMaxValue(e.target.value)} type="number" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Max Price" />
 
                         </div>
                         <div>
@@ -169,7 +172,7 @@ function ProductList() {
             {/* product card section */}
             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
                 {products.map(product => (
-                    <Card key={product._id} title={product.productName} img={product.productImage} price={product.price} rating={product.ratings} />
+                    <Card key={product._id} brand={products.brandName} title={product.productName} img={product.productImage} price={product.price} rating={product.ratings} />
                 ))}
             </div>
             {/* pagination section */}
