@@ -10,7 +10,7 @@ function Card({ title, img, rating, price ,brand}) {
                 </a>
                 <div className="px-5 pb-5">
                     <a>
-                        <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{title.slice(0,24)+'...'}</h5>
+                        <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{title.slice(0,26)+'...'}</h5>
                     </a>
                     <div className="flex items-center mt-2.5 mb-5">
                         <div className="flex items-center space-x-1 rtl:space-x-reverse">

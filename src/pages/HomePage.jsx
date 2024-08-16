@@ -10,9 +10,15 @@ function ProductList() {
     const [maxValue, setMaxValue] = useState(0)
     const [minValue, setMinValue] = useState(0)
     const [brand, setBrand] = useState('')
+    const [category, setCategory] = useState('')
+    const [loading, setLoading] = useState(true)
 
-    console.log({ brand, minValue, maxValue });
+
+
+    console.log(loading);
+
     useEffect(() => {
+        setLoading(true);
         if (searchTerm) {
             fetchSearchedProducts(currentPage, searchTerm);
         } else {
@@ -20,20 +26,20 @@ function ProductList() {
         }
     }, [currentPage, searchTerm]);
 
-
-
     const handleFilter = async (e) => {
-        e.preventDefault()
-        setCurrentPage(1)
+        setLoading(true);
+        e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:5000/products/filter?page=${currentPage}&limit=10&brand=${brand}&minValue=${minValue}&maxValue=${maxValue}&searchTerm=${searchTerm}`);
+            const response = await fetch(`http://localhost:5000/products/filter?page=${currentPage}&limit=10&brand=${brand}&minValue=${minValue}&maxValue=${maxValue}&category=${category}&searchTerm=${searchTerm}`);
             const data = await response.json();
             setProducts(data.products);
             setTotalPages(data.totalPages);
         } catch (error) {
             console.error('Failed to fetch products', error);
+        } finally {
+            setLoading(false);  // Ensures loading is set to false whether the fetch was successful or not
         }
-    }
+    };
 
     const fetchAllProducts = async (page) => {
         try {
@@ -43,6 +49,8 @@ function ProductList() {
             setTotalPages(data.totalPages);
         } catch (error) {
             console.error('Failed to fetch products', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -54,6 +62,8 @@ function ProductList() {
             setTotalPages(data.totalPages);
         } catch (error) {
             console.error('Failed to fetch products', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -108,6 +118,12 @@ function ProductList() {
 
     };
     const brandName = ['EcoCharge', 'Bose', 'Logitech', 'Samsung', 'Apple', 'Sony', 'Anker', 'Jabra', 'Dell', 'HP', 'Xiaomi', 'Motorola', 'LG', 'Corsair', 'Razer', 'Beats', 'Sennheiser', 'JBL', 'Google', 'OnePlus']
+    const categories = ['Electronics', 'Computer Accessories', 'Headphones', 'Smartphones']
+
+if (loading) {
+    return <h1>Loading data/.....</h1>
+}
+
     return (
         <div>
             {/* search box */}
@@ -147,6 +163,16 @@ function ProductList() {
 
                                 {
                                     brandName.map((b, i) => <option key={i} value={b}>{b}</option>)
+                                }
+                            </select>
+                        </div>
+                        <div class="max-w-40 ">
+
+                            <select onChange={(e) => setCategory(e.target.value)} defaultValue={'a'} id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option disabled value="a">All Category</option>
+
+                                {
+                                    categories.map((b, i) => <option key={i} value={b}>{b}</option>)
                                 }
                             </select>
                         </div>
