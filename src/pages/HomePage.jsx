@@ -14,9 +14,6 @@ function ProductList() {
     const [loading, setLoading] = useState(true)
 
 
-
-    console.log(loading);
-
     useEffect(() => {
         setLoading(true);
         if (searchTerm) {
