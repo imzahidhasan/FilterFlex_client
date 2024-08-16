@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Card from '../components/Card';
+import Footer from '../components/Footer';
 
 function ProductList() {
     const [products, setProducts] = useState([]);
@@ -72,10 +73,22 @@ function ProductList() {
         setCurrentPage(1);
     };
     const handleSort = (e) => {
-        e.preventDefault()
-        const sort = e.target.value
+        e.preventDefault();
+        const sort = e.target.value;
 
-    }
+        if (sort === '1') {
+            const sortedProducts = [...products].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+            setProducts(sortedProducts);
+        } else if (sort === '2') {
+            const sortedProducts = [...products].sort((a, b) => a.price - b.price);
+            setProducts(sortedProducts);
+        } else if (sort === '3') { 
+            const sortedProducts = [...products].sort((a, b) => b.price - a.price);
+            setProducts(sortedProducts);
+        }
+
+    };
+
     return (
         <div>
             {/* search box */}
@@ -94,11 +107,11 @@ function ProductList() {
                 </form>
             </div>
             {/* sort box section */}
-            <div>
+            <div className='p-4'>
                 <form onChange={handleSort} className="max-w-40">
                     <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
-                    <select id="countries" name='sort' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option disabled selected>Sort by</option>
+                    <select defaultValue={'0'} id="countries" name='sort' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option disabled  value='0'>Sort by</option>
                         <option value="1">Newest first</option>
                         <option value="2">Low to high</option>
                         <option value="3">High to low</option>
@@ -125,6 +138,7 @@ function ProductList() {
                     <a className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
                 </button>
             </div>
+            <Footer />
         </div>
     );
 }
