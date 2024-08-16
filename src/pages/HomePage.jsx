@@ -7,7 +7,11 @@ function ProductList() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
+    const [maxValue, setMaxValue] = useState(0)
+    const [minValue, setMinValue] = useState(0)
+    const [brand, setBrand] = useState('')
 
+    console.log({ brand, minValue, maxValue });
     useEffect(() => {
         if (searchTerm) {
             fetchSearchedProducts(currentPage, searchTerm);
@@ -16,9 +20,21 @@ function ProductList() {
         }
     }, [currentPage, searchTerm]);
 
+
+
+
+
+
+
+
+
+
+
+
+    
     const fetchAllProducts = async (page) => {
         try {
-            const response = await fetch(`http://localhost:5000/products?page=${page}&limit=4`);
+            const response = await fetch(`http://localhost:5000/products?page=${page}&limit=10`);
             const data = await response.json();
             setProducts(data.products);
             setTotalPages(data.totalPages);
@@ -82,13 +98,13 @@ function ProductList() {
         } else if (sort === '2') {
             const sortedProducts = [...products].sort((a, b) => a.price - b.price);
             setProducts(sortedProducts);
-        } else if (sort === '3') { 
+        } else if (sort === '3') {
             const sortedProducts = [...products].sort((a, b) => b.price - a.price);
             setProducts(sortedProducts);
         }
 
     };
-
+    const brandName = ['EcoCharge', 'Bose', 'Logitech', 'Samsung', 'Apple', 'Sony', 'Anker', 'Jabra', 'Dell', 'HP', 'Xiaomi', 'Motorola', 'LG', 'Corsair', 'Razer', 'Beats', 'Sennheiser', 'JBL', 'Google', 'OnePlus']
     return (
         <div>
             {/* search box */}
@@ -107,19 +123,47 @@ function ProductList() {
                 </form>
             </div>
             {/* sort box section */}
-            <div className='p-4'>
-                <form onChange={handleSort} className="max-w-40">
-                    <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
-                    <select defaultValue={'0'} id="countries" name='sort' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option disabled  value='0'>Sort by</option>
-                        <option value="1">Newest first</option>
-                        <option value="2">Low to high</option>
-                        <option value="3">High to low</option>
-                    </select>
-                </form>
 
+            <div className='flex justify-center'>
+                <div className='p-4 flex gap-4'>
+                    <form onChange={handleSort} className="max-w-40">
+                 
+                        <select defaultValue={'0'} id="countries" name='sort' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option disabled value='0'>Sort by</option>
+                            <option value="1">Newest first</option>
+                            <option value="2">Low to high</option>
+                            <option value="3">High to low</option>
+                        </select>
+                    </form>
+                    {/* filter section */}
+                    <form onSubmit={handleFilter} className='flex gap-4'>
+                        <div class="max-w-40 ">
+                           
+                            <select onChange={(e) => setBrand(e.target.value)} defaultValue={'a'} id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option disabled value="a">All Brand</option>
 
+                                {
+                                    brandName.map((b, i) => <option key={i} value={b}>{b}</option>)
+                                }
+                            </select>
+                        </div>
 
+                        <div>
+                           
+                            <input onChange={(e) => setMinValue(e.target.value)} type="number" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Min Price"  />
+                        </div>
+
+                        <div>
+                          
+                            <input onChange={(e) => setMaxValue(e.target.value)} type="number" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Max Price"  />
+
+                        </div>
+                        <div>
+                            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Filter</button>
+
+                        </div>
+                    </form>
+                </div>
 
             </div>
             {/* product card section */}
