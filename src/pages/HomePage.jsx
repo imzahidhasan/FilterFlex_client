@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Card from '../components/Card';
-import Footer from '../components/Footer';
-import Navbar from '../components/Navbar';
-import Loading from '../components/Loading';
 
 function ProductList() {
     const [products, setProducts] = useState([]);
@@ -13,11 +10,9 @@ function ProductList() {
     const [minValue, setMinValue] = useState(0)
     const [brand, setBrand] = useState('')
     const [category, setCategory] = useState('')
-    const [loading, setLoading] = useState(true)
 
 
     useEffect(() => {
-        setLoading(true);
         if (searchTerm) {
             fetchSearchedProducts(currentPage, searchTerm);
         } else {
@@ -26,7 +21,6 @@ function ProductList() {
     }, [currentPage, searchTerm]);
 
     const handleFilter = async (e) => {
-        setLoading(true);
         e.preventDefault();
         try {
             const response = await fetch(`https://filter-flex.vercel.app/products/filter?page=${currentPage}&limit=10&brand=${brand}&minValue=${minValue}&maxValue=${maxValue}&category=${category}&searchTerm=${searchTerm}`);
@@ -35,9 +29,7 @@ function ProductList() {
             setTotalPages(data.totalPages);
         } catch (error) {
             console.error('Failed to fetch products', error);
-        } finally {
-            setLoading(false);  // Ensures loading is set to false whether the fetch was successful or not
-        }
+        } 
     };
 
     const fetchAllProducts = async (page) => {
@@ -48,22 +40,18 @@ function ProductList() {
             setTotalPages(data.totalPages);
         } catch (error) {
             console.error('Failed to fetch products', error);
-        } finally {
-            setLoading(false);
-        }
+        } 
     };
 
     const fetchSearchedProducts = async (page, search) => {
         try {
-            const response = await fetch(`https://filter-flex.vercel.app/products/search?q=${search}&page=${page}&limit=4`);
+            const response = await fetch(`https://filter-flex.vercel.app/products/search?q=${search}&page=${page}&limit=10`);
             const data = await response.json();
             setProducts(data.products);
             setTotalPages(data.totalPages);
         } catch (error) {
             console.error('Failed to fetch products', error);
-        } finally {
-            setLoading(false);
-        }
+        } 
     };
 
     const handlePreviousPage = () => {
@@ -119,9 +107,7 @@ function ProductList() {
     const brandName = ['EcoCharge', 'Bose', 'Logitech', 'Samsung', 'Apple', 'Sony', 'Anker', 'Jabra', 'Dell', 'HP', 'Xiaomi', 'Motorola', 'LG', 'Corsair', 'Razer', 'Beats', 'Sennheiser', 'JBL', 'Google', 'OnePlus']
     const categories = ['Electronics', 'Computer Accessories', 'Headphones', 'Smartphones']
 
-    if (loading) {
-        return <Loading />
-    }
+  
 
     return (
         <div className='container mx-auto'>
@@ -155,9 +141,9 @@ function ProductList() {
                     </form>
                     {/* filter section */}
                     <form onSubmit={handleFilter} className='flex gap-4'>
-                        <div class="max-w-40 ">
+                        <div className="max-w-40 ">
 
-                            <select onChange={(e) => setBrand(e.target.value)} defaultValue={'a'} id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select onChange={(e) => setBrand(e.target.value)} defaultValue={'a'} id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option disabled value="a">All Brand</option>
 
                                 {
@@ -165,9 +151,9 @@ function ProductList() {
                                 }
                             </select>
                         </div>
-                        <div class="max-w-40 ">
+                        <div className="max-w-40 ">
 
-                            <select onChange={(e) => setCategory(e.target.value)} defaultValue={'a'} id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select onChange={(e) => setCategory(e.target.value)} defaultValue={'a'} id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option disabled value="a">All Category</option>
 
                                 {
@@ -178,16 +164,16 @@ function ProductList() {
 
                         <div>
 
-                            <input onChange={(e) => setMinValue(e.target.value)} type="number" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Min Price" />
+                            <input onChange={(e) => setMinValue(e.target.value)} type="number" id="phone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Min Price" />
                         </div>
 
                         <div>
 
-                            <input onChange={(e) => setMaxValue(e.target.value)} type="number" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Max Price" />
+                            <input onChange={(e) => setMaxValue(e.target.value)} type="number" id="phone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Max Price" />
 
                         </div>
                         <div>
-                            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Filter</button>
+                            <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Filter</button>
 
                         </div>
                     </form>
@@ -197,7 +183,7 @@ function ProductList() {
             {/* product card section */}
             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
                 {products.map(product => (
-                    <Card key={product._id} title={product.productName} img={product.productImage} price={product.price} rating={product.ratings} />
+                    <Card key={product._id} title={product.productName} img={product.productImage} price={product.price} brandName={product.brandName} rating={product.ratings} />
                 ))}
             </div>
             {/* pagination section */}
