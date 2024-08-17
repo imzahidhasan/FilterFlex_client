@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Card from '../components/Card';
 import Footer from '../components/Footer';
+import Navbar from '../components/Navbar';
+import Loading from '../components/Loading';
 
 function ProductList() {
     const [products, setProducts] = useState([]);
@@ -27,7 +29,7 @@ function ProductList() {
         setLoading(true);
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:5000/products/filter?page=${currentPage}&limit=10&brand=${brand}&minValue=${minValue}&maxValue=${maxValue}&category=${category}&searchTerm=${searchTerm}`);
+            const response = await fetch(`https://filter-flex.vercel.app/products/filter?page=${currentPage}&limit=10&brand=${brand}&minValue=${minValue}&maxValue=${maxValue}&category=${category}&searchTerm=${searchTerm}`);
             const data = await response.json();
             setProducts(data.products);
             setTotalPages(data.totalPages);
@@ -40,7 +42,7 @@ function ProductList() {
 
     const fetchAllProducts = async (page) => {
         try {
-            const response = await fetch(`http://localhost:5000/products?page=${page}&limit=10`);
+            const response = await fetch(`https://filter-flex.vercel.app/products?page=${page}&limit=10`);
             const data = await response.json();
             setProducts(data.products);
             setTotalPages(data.totalPages);
@@ -53,7 +55,7 @@ function ProductList() {
 
     const fetchSearchedProducts = async (page, search) => {
         try {
-            const response = await fetch(`http://localhost:5000/products/search?q=${search}&page=${page}&limit=4`);
+            const response = await fetch(`https://filter-flex.vercel.app/products/search?q=${search}&page=${page}&limit=4`);
             const data = await response.json();
             setProducts(data.products);
             setTotalPages(data.totalPages);
@@ -117,12 +119,12 @@ function ProductList() {
     const brandName = ['EcoCharge', 'Bose', 'Logitech', 'Samsung', 'Apple', 'Sony', 'Anker', 'Jabra', 'Dell', 'HP', 'Xiaomi', 'Motorola', 'LG', 'Corsair', 'Razer', 'Beats', 'Sennheiser', 'JBL', 'Google', 'OnePlus']
     const categories = ['Electronics', 'Computer Accessories', 'Headphones', 'Smartphones']
 
-if (loading) {
-    return <h1>Loading data/.....</h1>
-}
+    if (loading) {
+        return <Loading />
+    }
 
     return (
-        <div>
+        <div className='container mx-auto'>
             {/* search box */}
             <div className='p-4'>
                 <form onSubmit={handleSearch} className="max-w-md mx-auto">
@@ -195,7 +197,7 @@ if (loading) {
             {/* product card section */}
             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
                 {products.map(product => (
-                    <Card key={product._id} brand={products.brandName} title={product.productName} img={product.productImage} price={product.price} rating={product.ratings} />
+                    <Card key={product._id} title={product.productName} img={product.productImage} price={product.price} rating={product.ratings} />
                 ))}
             </div>
             {/* pagination section */}
@@ -208,7 +210,6 @@ if (loading) {
                     <a className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
                 </button>
             </div>
-            <Footer />
         </div>
     );
 }

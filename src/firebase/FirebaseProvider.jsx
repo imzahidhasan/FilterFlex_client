@@ -9,41 +9,46 @@ function FirebaseProvider({ children }) {
     const [loading, setLoading] = useState(true)
     const googleProvider = new GoogleAuthProvider();
 
-    const createUser = () => {
-        return createUserWithEmailAndPassword(auth,email,password)
+    const createUser = (email, password) => {
+        setLoading(true);
+        return createUserWithEmailAndPassword(auth, email, password);
     }
 
     const loginUser = (email, password) => {
-        setLoading(true)
-        return signInWithEmailAndPassword(auth, email, password)
+        setLoading(true);
+        return signInWithEmailAndPassword(auth, email, password);
     }
 
     const logout = () => {
-        return signOut(auth)
+        setLoading(true);
+        return signOut(auth).then(() => {
+            setUser(null);
+            setLoading(false);
+        });
     }
 
     const googleLogin = () => {
-        setLoading(true)
-        return signInWithPopup(auth, googleProvider)
+        setLoading(true);
+        return signInWithPopup(auth, googleProvider);
     }
 
     useEffect(() => {
-        setLoading(true)
+        setLoading(true);
 
         const unSubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                setUser(user)
+                setUser(user);
             } else {
-                setUser(null)
+                setUser(null);
             }
-            setLoading(false) // Set loading to false after checking auth state
-        })
+            setLoading(false);
+        });
 
-        return () => unSubscribe()
+        return () => unSubscribe();
 
     }, [])
 
-    const value = { loginUser, logout, googleLogin, loading, user }
+    const value = { loginUser, logout, createUser, googleLogin, loading, user }
     return (
         <AuthContext.Provider value={value}>
             {children}

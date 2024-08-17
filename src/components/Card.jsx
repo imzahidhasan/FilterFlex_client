@@ -3,7 +3,6 @@ import { AuthContext } from '../firebase/FirebaseProvider';
 
 function Card({ title, img, rating, price, brand }) {
     const { loading ,user} = useContext(AuthContext)
-    console.log(loading,user);
     return (
         <div>
             <p>{ brand}</p>

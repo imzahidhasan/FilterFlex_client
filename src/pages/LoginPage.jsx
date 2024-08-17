@@ -1,14 +1,14 @@
 import React, { useContext, useEffect } from 'react'
 import { AuthContext } from '../firebase/FirebaseProvider'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 function LoginPage() {
-    const { user, loginUser } = useContext(AuthContext)
+    const { user, loginUser, googleLogin } = useContext(AuthContext)
     const navigate = useNavigate()
 
     useEffect(() => {
         if (user) {
-            navigate('/products') 
+            navigate('/products')
         }
     }, [user, navigate])
 
@@ -39,6 +39,8 @@ function LoginPage() {
                     <input name='password' type="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder='enter your password' required />
                 </div>
                 <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+                <p className='pt-4'>Dont have a account? <Link className='text-blue-500 underline' to={'/register'}>Register</Link></p>
+                <div onClick={() => googleLogin()} className="text-white text-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 my-3 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Login witn Google</div>
             </form>
         </div>
     )
