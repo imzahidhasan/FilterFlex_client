@@ -128,10 +128,9 @@ function ProductList() {
             </div>
             {/* sort box section */}
 
-            <div className='flex justify-center'>
-                <div className='p-4 flex gap-4'>
+            <div className='flex flex-wrap justify-center'>
+                <div className='p-4 flex flex-wrap gap-4'>
                     <form onChange={handleSort} className="max-w-40">
-
                         <select defaultValue={'0'} id="countries" name='sort' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <option disabled value='0'>Sort by</option>
                             <option value="1">Newest first</option>
@@ -140,7 +139,7 @@ function ProductList() {
                         </select>
                     </form>
                     {/* filter section */}
-                    <form onSubmit={handleFilter} className='flex gap-4'>
+                    <form onSubmit={handleFilter} className='flex flex-wrap  gap-2 md:gap-4'>
                         <div className="max-w-40 ">
 
                             <select onChange={(e) => setBrand(e.target.value)} defaultValue={'a'} id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
