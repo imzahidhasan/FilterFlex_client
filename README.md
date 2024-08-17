@@ -1,5 +1,5 @@
 
-`# FilterFlex Frontend
+# FilterFlex Frontend
 
 FilterFlex is a web application built with React, Vite, and Tailwind CSS. It integrates Firebase for backend services and uses Flowbite for UI components. React Router is employed for navigation, and ESLint is used for code linting.
 
