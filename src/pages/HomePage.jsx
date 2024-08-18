@@ -10,48 +10,54 @@ function ProductList() {
     const [minValue, setMinValue] = useState(0)
     const [brand, setBrand] = useState('')
     const [category, setCategory] = useState('')
-
+    const [sort, setSort] = useState('')
+    console.log({ sort, category, brand, minValue, maxValue, searchTerm });
 
     useEffect(() => {
         if (searchTerm) {
             fetchSearchedProducts(currentPage, searchTerm);
+        } else if (minValue || maxValue || brand || category || sort) {
+            handleFilter()
         } else {
             fetchAllProducts(currentPage);
         }
     }, [currentPage, searchTerm]);
 
+
     const handleFilter = async (e) => {
-        e.preventDefault();
+        if (e) {
+            e.preventDefault();
+        }
         try {
-            const response = await fetch(`https://filter-flex.vercel.app/products/filter?page=${currentPage}&limit=10&brand=${brand}&minValue=${minValue}&maxValue=${maxValue}&category=${category}&searchTerm=${searchTerm}`);
+            const response = await fetch(`http://localhost:5000/products/filter?page=${currentPage}&limit=10&brand=${brand}&minValue=${minValue}&maxValue=${maxValue}&category=${category}&searchTerm=${searchTerm}&sort=${sort}`);
             const data = await response.json();
             setProducts(data.products);
             setTotalPages(data.totalPages);
         } catch (error) {
             console.error('Failed to fetch products', error);
-        } 
+        }
     };
 
     const fetchAllProducts = async (page) => {
         try {
-            const response = await fetch(`https://filter-flex.vercel.app/products?page=${page}&limit=10`);
+            const response = await fetch(`http://localhost:5000/products?page=${page}&limit=10`);
             const data = await response.json();
             setProducts(data.products);
             setTotalPages(data.totalPages);
         } catch (error) {
             console.error('Failed to fetch products', error);
-        } 
+        }
     };
 
     const fetchSearchedProducts = async (page, search) => {
         try {
-            const response = await fetch(`https://filter-flex.vercel.app/products/search?q=${search}&page=${page}&limit=10`);
+            const response = await fetch(`http://localhost:5000/products/search?q=${search}&page=${page}&limit=10`);
             const data = await response.json();
             setProducts(data.products);
             setTotalPages(data.totalPages);
         } catch (error) {
             console.error('Failed to fetch products', error);
-        } 
+        }
     };
 
     const handlePreviousPage = () => {
@@ -88,26 +94,10 @@ function ProductList() {
         setSearchTerm(searchText);
         setCurrentPage(1);
     };
-    const handleSort = (e) => {
-        e.preventDefault();
-        const sort = e.target.value;
-
-        if (sort === '1') {
-            const sortedProducts = [...products].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-            setProducts(sortedProducts);
-        } else if (sort === '2') {
-            const sortedProducts = [...products].sort((a, b) => a.price - b.price);
-            setProducts(sortedProducts);
-        } else if (sort === '3') {
-            const sortedProducts = [...products].sort((a, b) => b.price - a.price);
-            setProducts(sortedProducts);
-        }
-
-    };
     const brandName = ['EcoCharge', 'Bose', 'Logitech', 'Samsung', 'Apple', 'Sony', 'Anker', 'Jabra', 'Dell', 'HP', 'Xiaomi', 'Motorola', 'LG', 'Corsair', 'Razer', 'Beats', 'Sennheiser', 'JBL', 'Google', 'OnePlus']
     const categories = ['Electronics', 'Computer Accessories', 'Headphones', 'Smartphones']
 
-  
+
 
     return (
         <div className='container mx-auto'>
@@ -127,19 +117,18 @@ function ProductList() {
                 </form>
             </div>
             {/* sort box section */}
-
             <div className='flex flex-wrap justify-center'>
                 <div className='p-4 flex flex-wrap gap-4'>
-                    <form onChange={handleSort} className="max-w-40">
-                        <select defaultValue={'0'} id="countries" name='sort' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option disabled value='0'>Sort by</option>
-                            <option value="1">Newest first</option>
-                            <option value="2">Low to high</option>
-                            <option value="3">High to low</option>
-                        </select>
-                    </form>
                     {/* filter section */}
                     <form onSubmit={handleFilter} className='flex flex-wrap  gap-2 md:gap-4'>
+                        <div>
+                            <select onChange={(e) => setSort(e.target.value)} defaultValue={'0'} id="countries" name='sort' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option disabled value='0'>Sort by</option>
+                                <option value="newestFirst">Newest first</option>
+                                <option value="lowToHigh">Low to high</option>
+                                <option value="highToLow">High to low</option>
+                            </select>
+                        </div>
                         <div className="max-w-40 ">
 
                             <select onChange={(e) => setBrand(e.target.value)} defaultValue={'a'} id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
